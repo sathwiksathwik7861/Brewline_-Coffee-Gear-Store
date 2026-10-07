@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brewline: Coffee Gear Store</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap">
+<style>
+:root{--bg:#FAFAF7;--card:#fff;--ink:#1d2421;--mute:#667069;--line:#dfe2db;--brand:#1F3A34;--onbrand:#fff;--brass:#B8893B;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141916;--card:#1d2420;--ink:#eef1ec;--mute:#9aa49d;--line:#2d3731;--brand:#8fc2b0;--onbrand:#10201a;--brass:#d6a959}}
+:root[data-theme="dark"]{--bg:#141916;--card:#1d2420;--ink:#eef1ec;--mute:#9aa49d;--line:#2d3731;--brand:#8fc2b0;--onbrand:#10201a;--brass:#d6a959}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+h1,h2,.logo{font-family:'Libre Baskerville',Georgia,serif;margin:0}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{max-width:1100px;margin:auto;padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.logo{font-size:22px;font-weight:700;color:var(--brand);margin-right:auto}
+.search{flex:1 1 220px;max-width:360px;padding:9px 12px;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+.btn{background:var(--brand);color:var(--onbrand);border:0;border-radius:6px;padding:9px 14px;font-weight:600}
+.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.hero{max-width:1100px;margin:auto;padding:36px 16px 12px}
+.hero h1{font-size:clamp(26px,5vw,40px);line-height:1.2;max-width:18em}
+.hero p{color:var(--mute);max-width:36em;margin:10px 0 0}
+.tools{max-width:1100px;margin:auto;padding:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:6px 14px}
+.chip[aria-pressed="true"]{background:var(--brand);color:var(--onbrand);border-color:var(--brand)}
+select{margin-left:auto;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+.grid{max-width:1100px;margin:auto;padding:0 16px 40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.pic{height:160px;display:grid;place-items:center}.pic svg{width:130px;height:130px}
+.info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.info h2{font-size:16px}.cat{color:var(--mute);font-size:13px}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px}
+.price{font-weight:700}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:40px 0}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:10}
+.scrim.on{display:block}
+aside{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);background:var(--bg);z-index:11;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+aside.on{transform:none}
+.ahead,.afoot{padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.ahead{border-bottom:1px solid var(--line)}.afoot{border-top:1px solid var(--line);flex-direction:column;align-items:stretch;gap:8px}
+.items{flex:1;overflow:auto;padding:8px 16px}
+.item{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.item .t{width:44px;height:44px}.item .t svg{width:100%;height:100%}
+.qty{display:flex;align-items:center;gap:6px;margin-top:4px}
+.qty button{width:26px;height:26px;border:1px solid var(--line);background:var(--card);border-radius:4px}
+.rm{background:none;border:0;color:var(--mute);text-decoration:underline;font-size:13px}
+.ship{font-size:13px;color:var(--mute)}
+.bar2{height:6px;background:var(--line);border-radius:3px;overflow:hidden}.bar2 i{display:block;height:100%;background:var(--brass)}
+.sum{display:flex;justify-content:space-between}
+.modal{position:fixed;inset:0;display:none;place-items:center;z-index:12;padding:16px}
+.modal.on{display:grid}
+.pic{cursor:pointer}.lnk{background:none;border:0;padding:0;font:inherit;font-weight:700;text-align:left}.lnk:hover{text-decoration:underline}.dpic{height:200px;display:grid;place-items:center;border-radius:8px}.dpic svg{width:170px;height:170px}.stars{color:var(--brass);letter-spacing:1px}.box h3{font-size:15px;margin:14px 0 4px}.box ul,.box ol{margin:0;padding-left:18px;color:var(--mute)}.acts{display:flex;gap:8px;margin-top:16px}.rel{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.mini{display:flex;flex-direction:column;gap:4px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px;font-size:13px}.mini .mp{display:grid;place-items:center;height:72px;border-radius:6px}.mini svg{width:56px;height:56px}.box{background:var(--bg);border-radius:10px;padding:20px;width:min(520px,100%);max-height:100%;overflow:auto}
+.box label{display:block;margin:10px 0 4px;font-size:14px}
+.box input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+.err{color:#b3261e;font-size:13px;min-height:18px}
+@media(prefers-reduced-motion:reduce){aside{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="bar">
+<span class="logo">Brewline</span>
+<input class="search" id="q" type="search" placeholder="Search coffee gear" aria-label="Search products">
+<button class="btn ghost" id="theme" aria-label="Toggle dark mode">Theme</button>
+<button class="btn" id="open">Cart (<span id="count">0</span>)</button>
+</div></header>
+<section class="hero">
+<h1>Everything you need for a better cup at home</h1>
+<p>Grinders, brewers, kettles and beans, picked for people who brew every day. Free shipping on orders over ₹2,999.</p>
+</section>
+<div class="tools" id="chips" role="group" aria-label="Filter by category"></div>
+<main class="grid" id="grid"></main>
+
+<div class="scrim" id="scrim"></div>
+<aside id="cart" aria-label="Shopping cart" aria-hidden="true">
+<div class="ahead"><h2>Your cart</h2><button class="btn ghost" id="close">Close</button></div>
+<div class="items" id="items"></div>
+<div class="afoot">
+<div class="ship" id="shipmsg"></div><div class="bar2"><i id="shipbar"></i></div>
+<div class="sum"><span>Subtotal</span><strong id="sub">₹0</strong></div>
+<button class="btn" id="checkout">Check out</button>
+</div>
+</aside>
+
+<div class="modal" id="modal"><div class="box" id="box"></div></div>
+
+<script>
+const P=[
+{id:1,n:"Burr Grinder Pro",c:"Grinders",p:7499,e:"⚙️",bg:"#e9dcc3",r:4.8},
+{id:2,n:"Hand Grinder",c:"Grinders",p:3499,e:"🌀",bg:"#d9e4dc",r:4.5},
+{id:3,n:"Pour-Over Dripper",c:"Brewers",p:1999,e:"☕",bg:"#efd9c9",r:4.7},
+{id:4,n:"French Press 1L",c:"Brewers",p:2499,e:"🫖",bg:"#dfe3ec",r:4.4},
+{id:5,n:"Espresso Maker",c:"Brewers",p:12999,e:"🔥",bg:"#ecd0cc",r:4.6},
+{id:6,n:"AeroPress Kit",c:"Brewers",p:2999,e:"💨",bg:"#e0e8d4",r:4.9},
+{id:7,n:"Gooseneck Kettle",c:"Kettles",p:5499,e:"🫗",bg:"#d8e2e8",r:4.7},
+{id:8,n:"Digital Scale",c:"Kettles",p:2299,e:"⚖️",bg:"#ebe3d2",r:4.3},
+{id:9,n:"Ethiopia Light Roast",c:"Beans",p:799,e:"🌱",bg:"#dbe8d3",r:4.8},
+{id:10,n:"Colombia Medium Roast",c:"Beans",p:699,e:"🫘",bg:"#e8d9c8",r:4.6},
+{id:11,n:"House Espresso Blend",c:"Beans",p:749,e:"🌰",bg:"#e3d2c4",r:4.5},
+{id:12,n:"Ceramic Mug Set",c:"Kettles",p:1499,e:"🍵",bg:"#e6e0ef",r:4.4}];
+const W=i=>`<svg viewBox="0 0 120 120" role="img" aria-hidden="true">${i}</svg>`;
+const bag=c=>W(`<path d="M34 24h52l6 76H28z" fill="${c}"/><rect x="34" y="18" width="52" height="10" rx="2" fill="#3b2a1d"/><rect x="40" y="46" width="40" height="40" rx="4" fill="#f3efe6"/><ellipse cx="60" cy="62" rx="9" ry="12" fill="#6b4428" transform="rotate(20 60 62)"/><path d="M56 52c6 6 2 14 8 20" stroke="#f3efe6" stroke-width="2" fill="none"/><rect x="46" y="78" width="28" height="3" fill="${c}"/>`);
+const IMG={
+1:W(`<rect x="34" y="96" width="52" height="10" rx="3" fill="#1F3A34"/><rect x="38" y="46" width="44" height="50" rx="5" fill="#2f5249"/><path d="M34 14h52l-8 32H42z" fill="#cfd8d3" stroke="#8b9490" stroke-width="2"/><circle cx="60" cy="70" r="9" fill="#B8893B"/><rect x="46" y="84" width="28" height="8" rx="2" fill="#16302a"/>`),
+2:W(`<rect x="44" y="40" width="32" height="56" rx="6" fill="#8a5a36"/><rect x="40" y="34" width="40" height="10" rx="3" fill="#B8893B"/><path d="M60 34V20h26" stroke="#555" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="88" cy="20" r="5" fill="#B8893B"/><rect x="40" y="94" width="40" height="10" rx="3" fill="#3b2a1d"/>`),
+3:W(`<path d="M30 28h60l-14 32H44z" fill="#fff" stroke="#9a6a3a" stroke-width="3"/><rect x="42" y="60" width="36" height="6" fill="#9a6a3a"/><path d="M40 70h40l-4 28a6 6 0 0 1-6 5H50a6 6 0 0 1-6-5z" fill="#f3efe6" stroke="#1F3A34" stroke-width="3"/><path d="M80 76h8a7 7 0 0 1 0 14h-9" fill="none" stroke="#1F3A34" stroke-width="3"/>`),
+4:W(`<rect x="34" y="40" width="44" height="58" rx="4" fill="#d8e6ee" stroke="#444" stroke-width="3"/><rect x="36" y="64" width="40" height="32" fill="#4a2f1d" opacity=".85"/><path d="M56 12v50" stroke="#444" stroke-width="4"/><rect x="40" y="56" width="32" height="5" fill="#444"/><circle cx="56" cy="12" r="6" fill="#B8893B"/><path d="M78 52h10a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H78" fill="none" stroke="#444" stroke-width="4"/><rect x="30" y="98" width="52" height="6" rx="2" fill="#444"/>`),
+5:W(`<rect x="22" y="22" width="76" height="62" rx="8" fill="#b9c2bd"/><rect x="22" y="22" width="76" height="14" rx="8" fill="#1F3A34"/><circle cx="80" cy="50" r="6" fill="#B8893B"/><rect x="36" y="48" width="28" height="8" rx="3" fill="#333"/><rect x="26" y="84" width="68" height="12" rx="3" fill="#1F3A34"/><rect x="46" y="68" width="22" height="16" rx="3" fill="#f3efe6"/>`),
+6:W(`<rect x="50" y="8" width="20" height="30" rx="3" fill="#777"/><rect x="42" y="38" width="36" height="42" rx="4" fill="#2a2a2a"/><rect x="42" y="38" width="36" height="8" fill="#B8893B"/><path d="M34 82h52l-5 22H39z" fill="#f3efe6" stroke="#1F3A34" stroke-width="3"/>`),
+7:W(`<path d="M34 50h44l4 46H30z" fill="#8b9490"/><rect x="32" y="44" width="48" height="8" rx="3" fill="#6b7571"/><circle cx="56" cy="40" r="5" fill="#1F3A34"/><path d="M78 82c10-4 14-24 28-44" stroke="#8b9490" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M34 56c-14 0-16 24-4 30" stroke="#1F3A34" stroke-width="5" fill="none"/><rect x="28" y="94" width="56" height="6" rx="2" fill="#555"/>`),
+8:W(`<rect x="18" y="60" width="84" height="38" rx="8" fill="#2a2a2a"/><rect x="26" y="42" width="68" height="14" rx="4" fill="#b9c2bd"/><rect x="38" y="68" width="44" height="20" rx="3" fill="#9fd4b8"/><text x="60" y="83" font-size="13" text-anchor="middle" font-family="monospace" fill="#10201a">18.0 g</text>`),
+9:bag("#3f7d5b"),10:bag("#b5651d"),11:bag("#7a2e2e"),
+12:W(`<path d="M16 52h40v34a10 10 0 0 1-10 10H26a10 10 0 0 1-10-10z" fill="#f3efe6" stroke="#1F3A34" stroke-width="3"/><path d="M56 60h8a8 8 0 0 1 0 16h-8" fill="none" stroke="#1F3A34" stroke-width="3"/><path d="M68 66h38v26a10 10 0 0 1-10 10H78a10 10 0 0 1-10-10z" fill="#B8893B"/>`)};
+const DET={
+1:{n:312,d:"A 40mm steel burr grinder with 30 grind settings, from espresso to French press. Grinds evenly with low heat so your beans keep their flavour.",w:"2 years manufacturer warranty on motor and burrs. Free pickup and repair within India.",s:["Burrs: 40mm hardened steel","Hopper: 250 g","Settings: 30 steps","Power: 150 W"]},
+2:{n:198,d:"A compact manual grinder with ceramic burrs and an adjustable dial. Quiet, travel friendly and needs no power.",w:"1 year warranty against manufacturing defects. Burrs covered for 6 months.",s:["Burrs: ceramic conical","Capacity: 30 g","Body: aluminium","Weight: 480 g"]},
+3:{n:254,d:"A cone dripper with spiral ribs for even extraction. Fits most mugs and carafes, and takes size 02 paper filters.",w:"6 months warranty on cracks or defects. Replacement shipped free.",s:["Material: ceramic","Size: 02, 1 to 4 cups","Filters: size 02 paper","Dishwasher safe"]},
+4:{n:176,d:"A borosilicate glass press with a stainless steel plunger and double mesh filter for a full-bodied cup.",w:"1 year warranty on plunger and frame. Glass breakage covered in the first 7 days.",s:["Capacity: 1 litre","Glass: borosilicate","Frame: stainless steel","Brews: 4 to 8 cups"]},
+5:{n:421,d:"A 15 bar pump espresso machine with a steam wand for milk. Heats up in 40 seconds and fits single and double baskets.",w:"2 years warranty on pump and heater. 1 year on accessories. Service centres in major cities.",s:["Pressure: 15 bar","Tank: 1.5 litre","Power: 1350 W","Heat up: 40 seconds"]},
+6:{n:389,d:"The classic plunger brewer for smooth, low-acid coffee in about two minutes. Comes with 350 paper filters.",w:"1 year warranty on the chamber and plunger.",s:["Brew time: about 2 minutes","Makes: 1 to 3 cups","Material: BPA-free plastic","Includes: stirrer, scoop, filters"]},
+7:{n:267,d:"A stainless steel kettle with a narrow gooseneck spout for slow, controlled pouring. Works on gas and induction.",w:"1 year warranty on body and handle. Not covered: dents from drops.",s:["Capacity: 900 ml","Material: 304 stainless steel","Works on: gas, induction, electric","Handle: heat-resistant"]},
+8:{n:143,d:"A precise brewing scale with a built-in timer. Reads to 0.1 g and has an auto-off to save the battery.",w:"1 year warranty. Battery and cable are not covered.",s:["Accuracy: 0.1 g","Max weight: 2 kg","Timer: built in","Charging: USB-C"]},
+9:{n:208,d:"Light roast, single origin beans from Ethiopia with notes of jasmine, lemon and blueberry. Best for pour-over.",w:"No warranty. Freshness promise: roasted to order, and refunded if you are not happy within 7 days.",s:["Weight: 250 g","Roast: light","Origin: Ethiopia","Notes: floral, citrus, berry"]},
+10:{n:231,d:"Medium roast Colombian beans with notes of caramel, cocoa and red apple. A balanced everyday coffee.",w:"No warranty. Freshness promise: roasted to order, and refunded if you are not happy within 7 days.",s:["Weight: 250 g","Roast: medium","Origin: Colombia","Notes: caramel, cocoa, apple"]},
+11:{n:164,d:"A medium-dark blend built for espresso and milk drinks. Thick crema with notes of dark chocolate and toasted nuts.",w:"No warranty. Freshness promise: roasted to order, and refunded if you are not happy within 7 days.",s:["Weight: 250 g","Roast: medium dark","Origin: India and Brazil blend","Notes: chocolate, nuts"]},
+12:{n:97,d:"A set of two stoneware mugs in a matte glaze. Hold the heat well and are safe for microwave and dishwasher.",w:"3 months warranty against chips and cracks on delivery.",s:["Set: 2 mugs","Capacity: 300 ml each","Material: stoneware","Microwave and dishwasher safe"]}};
+const EX={
+1:{u:["Even grounds give a more balanced, less bitter cup","30 settings cover espresso, pour-over and French press","Fresh grinding keeps the aroma of your beans"],h:["Fill the hopper with whole beans","Pick a grind setting: fine for espresso, coarse for French press","Press start and grind into the catch container","Brew right away for the best flavour"],x:["Takes up counter space","Louder than a hand grinder"]},
+2:{u:["Quiet and needs no electricity","Small enough for travel or camping","Good grind quality for the price"],h:["Add beans to the chamber and close the lid","Set the dial to your brew method","Turn the handle until the beans are ground","Open the base and pour out the grounds"],x:["Takes effort for large batches","Slower than an electric grinder"]},
+3:{u:["Gives a clean, bright cup that shows off the bean","Cheap and simple way to start with manual brewing","Easy to clean and store"],h:["Place a paper filter and rinse it with hot water","Add 15 g of medium-fine coffee","Pour 250 ml water at 92 to 96 C in slow circles","Wait about 3 minutes for it to drain"],x:["Needs a scale and kettle for best results","Paper filters are a recurring cost"]},
+4:{u:["Brews a full-bodied, rich cup","Makes several cups at once","No paper filters needed"],h:["Add 1 tablespoon of coarse coffee per 100 ml of water","Pour hot water and stir gently","Place the lid and wait 4 minutes","Press the plunger down slowly and serve"],x:["Fine sediment can end up in the cup","Glass can break if dropped"]},
+5:{u:["Makes cafe-style espresso and milk drinks at home","Saves money compared with buying daily coffees","Steam wand makes lattes and cappuccinos"],h:["Fill the water tank and heat the machine","Grind fine, fill and tamp the portafilter","Lock it in and run a shot for 25 to 30 seconds","Steam milk with the wand if you want a latte"],x:["Takes practice to get a good shot","Needs regular descaling and cleaning"]},
+6:{u:["Quick brew in about two minutes","Smooth, low-acid coffee","Light and almost unbreakable for travel"],h:["Put a filter in the cap and rinse it","Add 15 g of coffee and pour water to the mark","Stir for 10 seconds and insert the plunger","Press gently into your mug"],x:["Makes only one to three cups","Needs paper filters"]},
+7:{u:["Slow, steady pouring for even extraction","Stays sturdy and rust-free","Also good for tea and instant noodles"],h:["Fill with water and heat on a stove","Take it off at the right temperature","Pour in a thin stream in slow circles over the grounds","Dry the kettle after use to avoid marks"],x:["Has no built-in temperature control","Smaller capacity than a regular kettle"]},
+8:{u:["Exact coffee and water amounts every time","Timer helps you repeat a good recipe","Works for baking and other kitchen use"],h:["Place the scale on a flat surface and turn it on","Put your cup or dripper on top and press tare","Add coffee until you reach the target weight","Start the timer and pour water to your recipe"],x:["Water spills can damage it","Needs charging from time to time"]},
+9:{u:["Bright, fruity cup that suits pour-over","Single origin lets you taste one region","Roasted fresh to order"],h:["Store in a cool, dark, airtight container","Grind just before brewing","Use 15 g of coffee for 250 ml of water","Use up within 4 weeks of roasting"],x:["Light roast can taste sour if brewed badly","Not ideal for milk drinks"]},
+10:{u:["Balanced flavour that most people enjoy","Works with almost every brew method","Good choice for everyday drinking"],h:["Keep in an airtight container away from sunlight","Grind to match your brewer","Use 60 g of coffee per litre of water","Use up within 4 weeks of roasting"],x:["Less distinctive than single origin lots","Flavour fades quickly once opened"]},
+11:{u:["Made for espresso, with thick crema","Holds its flavour in milk drinks","Consistent from batch to batch"],h:["Store in an airtight container","Grind fine for espresso","Use 18 g for a double shot","Rest the beans for 5 days after roasting for best results"],x:["Can taste bitter if over-extracted","Darker roast hides subtle flavours"]},
+12:{u:["Keeps drinks warm longer than thin cups","Matching set for two","Safe for the microwave and dishwasher"],h:["Rinse before first use","Warm the mugs with hot water before pouring","Wash by hand or in the dishwasher","Do not use on a stove or open flame"],x:["Heavier than regular mugs","Can chip if knocked hard"]}};
+const REL={1:[2,9,8],2:[1,3,10],3:[7,8,9],4:[7,10,12],5:[11,7,12],6:[8,9,12],7:[3,8,4],8:[3,7,6],9:[3,6,1],10:[4,2,12],11:[5,1,12],12:[4,10,11]};
+const stars=r=>"★".repeat(Math.round(r))+"☆".repeat(5-Math.round(r));
+function detail(id){
+ const p=P.find(x=>x.id==id),d=DET[id],e=EX[id];
+ $("#box").innerHTML=`<div class="dpic" style="background:${p.bg}">${IMG[id]}</div><h2 style="margin-top:14px">${p.n}</h2><div class="cat">${p.c}</div><div style="margin:6px 0"><span class="stars" aria-label="Rated ${p.r} out of 5">${stars(p.r)}</span> <strong>${p.r}</strong> <span class="cat">(${d.n} reviews)</span></div><div class="price" style="font-size:22px">${money(p.p)}</div><p>${d.d}</p><h3>Why it is useful</h3><ul>${e.u.map(x=>`<li>${x}</li>`).join("")}</ul><h3>How to use it</h3><ol>${e.h.map(x=>`<li>${x}</li>`).join("")}</ol><h3>Downsides</h3><ul>${e.x.map(x=>`<li>${x}</li>`).join("")}</ul><h3>Specifications</h3><ul>${d.s.map(x=>`<li>${x}</li>`).join("")}</ul><h3>Warranty</h3><p style="margin:0;color:var(--mute)">${d.w}</p><div class="acts"><button class="btn" data-add="${id}">Add to cart</button><button class="btn ghost" id="cancel">Close</button></div><h3>Related items</h3><div class="rel">${REL[id].map(r=>{const q=P.find(x=>x.id==r);return `<button class="mini" data-o="${r}"><span class="mp" style="background:${q.bg}">${IMG[r]}</span><span>${q.n}</span><strong>${money(q.p)}</strong></button>`}).join("")}</div>`;
+ $("#modal").classList.add("on");$("#box").scrollTop=0;
+}
+const $=s=>document.querySelector(s),money=n=>"₹"+n.toLocaleString("en-IN",{maximumFractionDigits:0}),FREE=2999;
+let cart={},cat="All",q="",sort="featured";
+try{cart=JSON.parse(localStorage.getItem("brewline-cart")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("brewline-cart",JSON.stringify(cart))}catch(e){}};
+const cats=["All",...new Set(P.map(p=>p.c))];
+$("#chips").innerHTML=cats.map(c=>`<button class="chip" data-c="${c}" aria-pressed="${c==="All"}">${c}</button>`).join("")+
+`<select id="sort" aria-label="Sort products"><option value="featured">Featured</option><option value="low">Price, low to high</option><option value="high">Price, high to low</option><option value="rating">Top rated</option></select>`;
+function list(){
+ let r=P.filter(p=>(cat==="All"||p.c===cat)&&p.n.toLowerCase().includes(q.toLowerCase()));
+ if(sort==="low")r.sort((a,b)=>a.p-b.p);if(sort==="high")r.sort((a,b)=>b.p-a.p);if(sort==="rating")r.sort((a,b)=>b.r-a.r);
+ $("#grid").innerHTML=r.length?r.map(p=>`<article class="card"><div class="pic" data-o="${p.id}" style="background:${p.bg}">${IMG[p.id]}</div><div class="info"><h2><button class="lnk" data-o="${p.id}">${p.n}</button></h2><span class="cat">${p.c}, rated ${p.r}</span><div class="row"><span class="price">${money(p.p)}</span><button class="btn" data-add="${p.id}">Add to cart</button></div></div></article>`).join(""):`<p class="empty">No products match your search. Try another word or category.</p>`;
+}
+function draw(){
+ const ids=Object.keys(cart).filter(i=>cart[i]>0),n=ids.reduce((s,i)=>s+cart[i],0);
+ const sub=ids.reduce((s,i)=>s+cart[i]*P.find(p=>p.id==i).p,0);
+ $("#count").textContent=n;$("#sub").textContent=money(sub);
+ $("#items").innerHTML=ids.length?ids.map(i=>{const p=P.find(x=>x.id==i);return `<div class="item"><div class="t">${IMG[p.id]}</div><div><strong>${p.n}</strong><div class="qty"><button data-d="${i}" aria-label="Decrease quantity">-</button><span>${cart[i]}</span><button data-u="${i}" aria-label="Increase quantity">+</button></div></div><div style="text-align:right">${money(p.p*cart[i])}<br><button class="rm" data-r="${i}">Remove</button></div></div>`}).join(""):`<p class="empty">Your cart is empty. Add something from the store.</p>`;
+ $("#shipmsg").textContent=sub>=FREE?"You get free shipping.":`Add ${money(FREE-sub)} more for free shipping.`;
+ $("#shipbar").style.width=Math.min(100,sub/FREE*100)+"%";
+ $("#checkout").disabled=!ids.length;save();
+}
+const panel=on=>{$("#cart").classList.toggle("on",on);$("#scrim").classList.toggle("on",on);$("#cart").setAttribute("aria-hidden",!on)};
+const close=()=>{panel(false);$("#modal").classList.remove("on")};
+document.addEventListener("click",e=>{
+ const t=e.target,g=a=>t.dataset[a],o=t.closest("[data-o]");
+ if(o){detail(o.dataset.o)}
+ else if(t.id==="modal")close();
+ else if(g("add")){cart[g("add")]=(cart[g("add")]||0)+1;draw();$("#modal").classList.remove("on");panel(true)}
+ else if(g("u")){cart[g("u")]++;draw()}
+ else if(g("d")){cart[g("d")]--;if(cart[g("d")]<1)delete cart[g("d")];draw()}
+ else if(g("r")){delete cart[g("r")];draw()}
+ else if(g("c")){cat=g("c");document.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.c===cat));list()}
+ else if(t.id==="open")panel(true);
+ else if(t.id==="close"||t.id==="scrim")close();
+ else if(t.id==="theme"){const d=document.documentElement,dark=getComputedStyle(d).getPropertyValue("--bg").trim()==="#141916";d.dataset.theme=dark?"light":"dark"}
+ else if(t.id==="checkout"){
+  const sub=Object.keys(cart).reduce((s,i)=>s+cart[i]*P.find(p=>p.id==i).p,0),ship=sub>=FREE?0:99;
+  $("#box").innerHTML=`<h2>Checkout</h2><p class="ship">Subtotal ${money(sub)} + shipping ${money(ship)} = <strong>${money(sub+ship)}</strong></p><label for="nm">Full name</label><input id="nm" autocomplete="name"><label for="em">Email</label><input id="em" type="email" autocomplete="email"><label for="ad">Delivery address</label><input id="ad" autocomplete="street-address"><div class="err" id="err" role="alert"></div><button class="btn" id="pay" style="width:100%">Place order</button><button class="rm" id="cancel" style="margin-top:8px">Back to cart</button>`;
+  $("#modal").classList.add("on")}
+ else if(t.id==="cancel")$("#modal").classList.remove("on");
+ else if(t.id==="pay"){
+  const v=i=>$("#"+i).value.trim();
+  if(!v("nm")||!/^\S+@\S+\.\S+$/.test(v("em"))||!v("ad")){$("#err").textContent="Enter your name, a valid email and a delivery address.";return}
+  const no="BL-"+Math.floor(10000+Math.random()*90000);cart={};draw();
+  $("#box").innerHTML=`<h2>Order placed</h2><p>Thanks, ${v("nm")}. Your order <strong>${no}</strong> is confirmed. A receipt goes to ${v("em")}.</p><button class="btn" id="done">Keep shopping</button>`}
+ else if(t.id==="done")close();
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")close()});
+$("#q").addEventListener("input",e=>{q=e.target.value;list()});
+document.addEventListener("change",e=>{if(e.target.id==="sort"){sort=e.target.value;list()}});
+list();draw();
+</script>
+</body>
+</html>
